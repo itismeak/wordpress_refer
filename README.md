@@ -8,3 +8,6 @@ reference site link
    ->  https://www.wpbeginner.com/beginners-guide/beginners-guide-to-wordpress-file-and-directory-structure/ 
 3)file directories structure
    ->    https://developer.wordpress.org/files/2014/10/Screenshot-2019-01-23-00.20.04.png
+4)enqueu the css&js file
+   -> https://hollypryce.com/enqueue/
+

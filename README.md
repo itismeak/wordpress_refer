@@ -10,4 +10,6 @@ reference site link
    ->    https://developer.wordpress.org/files/2014/10/Screenshot-2019-01-23-00.20.04.png
 4)enqueu the css&js file in wp (function.php)
    -> https://hollypryce.com/enqueue/
+5)wordpress query post(single.php) refer
+   -> https://developer.wordpress.org/reference/classes/wp_query/
 

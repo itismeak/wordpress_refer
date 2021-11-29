@@ -4,15 +4,42 @@ reference site link
    ->  (breif refer)   https://deliciousbrains.com/tour-wordpress-database/ 
    ->  (table structure)  https://usersinsights.com/wordpress-user-database-tables/  
    ->  (beginers refer)  https://blogvault.net/wordpress-database-schema/   
+   
 2)wordpress file directories refer site
    ->  https://www.wpbeginner.com/beginners-guide/beginners-guide-to-wordpress-file-and-directory-structure/ 
+   
 3)file directories structure
    ->    https://developer.wordpress.org/files/2014/10/Screenshot-2019-01-23-00.20.04.png
+   
 4)enqueu the css&js file in wp (function.php)
    -> https://hollypryce.com/enqueue/
+   
 5)wordpress query post(single.php) refer
    -> https://developer.wordpress.org/reference/classes/wp_query/
-6)    query post sample code(all post data)
+   
+6)single.php query view code below
+   <?php get_header();?>
+<?php while ( have_posts() ) : the_post(); ?>
+<div class="body">
+	<div class="container">
+		<div class="clear"></div>
+		<div class="main">
+			<div class="post content">
+				<h1 class="page-title"><a href="<?php the_permalink(); ?>"><?php the_title();?></a></h1>
+
+				<div class="content">
+					<?php the_content(); ?>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<?php endwhile; ?>
+<?php get_footer();?>
+
+
+7)    query post sample code(all post data)
       -> $args = array(
       'post_type'=> 'post',
       'orderby'    => 'ID',

@@ -12,7 +12,7 @@ reference site link
    -> https://hollypryce.com/enqueue/
 5)wordpress query post(single.php) refer
    -> https://developer.wordpress.org/reference/classes/wp_query/
-6)    query post sample code
+6)    query post sample code(all post data)
       -> $args = array(
       'post_type'=> 'post',
       'orderby'    => 'ID',

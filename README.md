@@ -55,4 +55,11 @@ reference site link
       <?php endif; wp_reset_postdata(); ?>
    
    Explain: while(condition){} ->  replace   ->while(condition) :(open bracket) &  endwhile;(close Bracket)    *same as all loops
+   
+   
+   8)   add feauture img option in custom themes->post (section)
+     function mytheme_post_thumbnails() {
+    add_theme_support( 'post-thumbnails' );
+}
+add_action( 'after_setup_theme', 'mytheme_post_thumbnails' );
 

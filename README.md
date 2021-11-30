@@ -66,4 +66,5 @@ add_action( 'after_setup_theme', 'mytheme_post_thumbnails' );
 
 9)query post refer site
 	->  https://awhitepixel.com/blog/query-posts-in-wordpress/
-
+10)categories in wp
+->  https://njengah.com/display-category-name-in-wordpress/

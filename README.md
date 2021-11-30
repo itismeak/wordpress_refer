@@ -1,4 +1,5 @@
 # wordpress_refer
+wp complete query refer   ->   https://developer.wordpress.org/reference/classes/wp_query/
 reference site link
 1)db table refer site
    ->  (breif refer)   https://deliciousbrains.com/tour-wordpress-database/ 

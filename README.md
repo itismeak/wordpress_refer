@@ -70,7 +70,8 @@ add_action( 'after_setup_theme', 'mytheme_post_thumbnails' );
 ->  https://njengah.com/display-category-name-in-wordpress/
 
 11) wp custom post type
-12) ->   // Our create custom post type function(function.php)
+ -> refer site https://www.wpbeginner.com/wp-tutorials/how-to-create-custom-post-types-in-wordpress/
+ ->   // Our create custom post type function(function.php)
 function create_posttype() {
  
     register_post_type( 'movies',

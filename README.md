@@ -68,3 +68,25 @@ add_action( 'after_setup_theme', 'mytheme_post_thumbnails' );
 	->  https://awhitepixel.com/blog/query-posts-in-wordpress/
 10)categories in wp
 ->  https://njengah.com/display-category-name-in-wordpress/
+
+11) wp custom post type
+12) ->   // Our create custom post type function(function.php)
+function create_posttype() {
+ 
+    register_post_type( 'movies',
+    // CPT Options
+        array(
+            'labels' => array(
+                'name' => __( 'Movies' ),
+                'singular_name' => __( 'Movie' )
+            ),
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => array('slug' => 'movies'),
+            'show_in_rest' => true,
+ 
+        )
+    );
+}
+// Hooking up our function to theme setup
+add_action( 'init', 'create_posttype' );

@@ -91,3 +91,6 @@ function create_posttype() {
 }
 // Hooking up our function to theme setup
 add_action( 'init', 'create_posttype' );
+
+12) query post advance concept   get_posts();
+	->	https://kinsta.com/blog/wordpress-get_posts/

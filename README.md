@@ -94,3 +94,18 @@ add_action( 'init', 'create_posttype' );
 
 12) query post advance concept   get_posts();
 	->	https://kinsta.com/blog/wordpress-get_posts/
+13) get category
+	->   <?php 
+                                            $args=array(
+                                                'post_type'=>'news',
+                                                'taxonomy' => 'news_category'
+                                            ); 
+                                            $news_categories=get_categories($args);
+                                            foreach($news_categories as $categry){
+                                            ?>
+                                            
+                                               <a href="<?php echo get_category_link($categry->term_id) ?>"><h3><?php echo $categry->name; ?></h3></a>
+
+                                            <?php
+                                            }
+                                            ?>

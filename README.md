@@ -89,6 +89,14 @@ function create_posttype() {
         )
     );
 }
+
+//create creategory for custom post type
+
+//CREATE A CATEGORY FOR CUSTOM POST TYPE 
+register_taxonomy('taxonomy_name','movies',array('hierarchical' => true, 'label' => 'Category', 'query_var' =>'taxonomy_name' , 'rewrite' => array( 'slug' => 'taxonomy_name' )));
+
+
+
 // Hooking up our function to theme setup
 add_action( 'init', 'create_posttype' );
 

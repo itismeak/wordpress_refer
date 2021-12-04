@@ -176,5 +176,7 @@ function set_form1(){
 	$message = $_POST['msg'];
 	$admin =get_option('admin_email');
 	echo $name;
-
+	
+	
+	exit(); //must for all ajax because solve 0 add ajax data
 }  

@@ -109,3 +109,72 @@ add_action( 'init', 'create_posttype' );
                                             <?php
                                             }
                                             ?>
+					    
+					    
+14) wp ajax submit
+  1)	//form(frend end)
+   <form action="" method="post" class="tm-contact-form">                                
+                                <div class="form-group">
+                                    <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="Name"  required/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="Email"  required/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="Subject"  required/>
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="contact_message" name="contact_message" class="form-control" rows="6" placeholder="Message" required></textarea>
+                                </div>
+
+                                <button type="submit" class="tm-btn">Submit</button><br><br>  
+                                <span class="contact_form_error"></span>                        
+                            </form> 
+			    
+  2)  //function.php(enque custom js file(main.js) and enque admin-ajax.php file use wp_localize_script)
+        wp_enqueue_script("ajax-script",get_template_directory_uri()."/js/main.js");  //(enque custom js file(main.js)
+	wp_localize_script( 'ajax-script', 'cpm_object', array('ajax_url' => admin_url( 'admin-ajax.php' ) ));  //enque admin-ajax.php and php variable assign js 
+	
+ 3) // ajax for main.js 
+   $(document).ready(function() {
+    $("form").submit(function(event) {
+        event.preventDefault();
+        var name = $("#contact_name").val();
+        var mail = $("#contact_email").val();
+        var subject = $("#contact_subject").val();
+        var msg = $("#contact_message").val();
+        $.ajax({
+                type: 'POST',
+                url: cpm_object.ajax_url, //get form data to send function.php 
+                data: {
+                    action: 'set_form',
+                    name: name,
+                    mail: mail,
+                    subject: subject,
+                    msg: msg
+                }
+            })
+            .done(function(data) {
+
+                $(".contact_form_error").html("THANK YOU FOR SUBMIT").css("color", "green");
+            })
+            .error(function(a) {
+                $(".contact_form_error").html("SOMETHING WRONG").css("color", "red");
+            });
+        return false;
+    });
+});
+
+ 4)   // THE AJAX ADD ACTIONS
+add_action( 'wp_ajax_set_form', 'set_form1' );    //execute when wp logged in  //wp_ajax_set_form -> same name for action
+add_action( 'wp_ajax_nopriv_set_form', 'set_form1'); //execute when logged out
+
+function set_form1(){
+	$name = $_POST['name'];
+	$email = $_POST['mail'];
+    $subj=$_post['subject'];
+	$message = $_POST['msg'];
+	$admin =get_option('admin_email');
+	echo $name;
+
+}  

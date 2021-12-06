@@ -119,72 +119,103 @@ add_action( 'init', 'create_posttype' );
                                             ?>
 					    
 					    
-14) wp ajax submit
-  1)	//form(frend end)
-   <form action="" method="post" class="tm-contact-form">                                
-                                <div class="form-group">
-                                    <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="Name"  required/>
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="Email"  required/>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="Subject"  required/>
-                                </div>
-                                <div class="form-group">
-                                    <textarea id="contact_message" name="contact_message" class="form-control" rows="6" placeholder="Message" required></textarea>
-                                </div>
+14) wp ajax submit data store posts content
+		  1)	//form(frend end)
+		   <form action="" method="post" class="tm-contact-form">                                
+						<div class="form-group">
+						    <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="Name"  required/>
+						</div>
+						<div class="form-group">
+						    <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="Email"  required/>
+						</div>
+						<div class="form-group">
+						    <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="Subject"  required/>
+						</div>
+						<div class="form-group">
+						    <textarea id="contact_message" name="contact_message" class="form-control" rows="6" placeholder="Message" required></textarea>
+						</div>
 
-                                <button type="submit" class="tm-btn">Submit</button><br><br>  
-                                <span class="contact_form_error"></span>                        
-                            </form> 
-			    
-  2)  //function.php(enque custom js file(main.js) and enque admin-ajax.php file use wp_localize_script)
-        wp_enqueue_script("ajax-script",get_template_directory_uri()."/js/main.js");  //(enque custom js file(main.js)
-	wp_localize_script( 'ajax-script', 'cpm_object', array('ajax_url' => admin_url( 'admin-ajax.php' ) ));  //enque admin-ajax.php and php variable assign js 
-	
- 3) // ajax for main.js 
-   $(document).ready(function() {
-    $("form").submit(function(event) {
-        event.preventDefault();
-        var name = $("#contact_name").val();
-        var mail = $("#contact_email").val();
-        var subject = $("#contact_subject").val();
-        var msg = $("#contact_message").val();
-        $.ajax({
-                type: 'POST',
-                url: cpm_object.ajax_url, //get form data to send function.php 
-                data: {
-                    action: 'set_form',
-                    name: name,
-                    mail: mail,
-                    subject: subject,
-                    msg: msg
-                }
-            })
-            .done(function(data) {
+						<button type="submit" class="tm-btn">Submit</button><br><br>  
+						<span class="contact_form_error"></span>                        
+					    </form> 
 
-                $(".contact_form_error").html("THANK YOU FOR SUBMIT").css("color", "green");
-            })
-            .error(function(a) {
-                $(".contact_form_error").html("SOMETHING WRONG").css("color", "red");
-            });
-        return false;
-    });
-});
+		  2)  //function.php(enque custom js file(main.js) and enque admin-ajax.php file use wp_localize_script)
+			wp_enqueue_script("ajax-script",get_template_directory_uri()."/js/main.js");  //(enque custom js file(main.js)
+			wp_localize_script( 'ajax-script', 'cpm_object', array('ajax_url' => admin_url( 'admin-ajax.php' ) ));  //enque admin-ajax.php and php variable assign js 
 
- 4)   // THE AJAX ADD ACTIONS
-add_action( 'wp_ajax_set_form', 'set_form1' );    //execute when wp logged in  //wp_ajax_set_form -> same name for action
-add_action( 'wp_ajax_nopriv_set_form', 'set_form1'); //execute when logged out
+		 3) // ajax for main.js 
+		   $(document).ready(function() {
+		    $("form").submit(function(event) {
+			event.preventDefault();
+			var name = $("#contact_name").val();
+			var mail = $("#contact_email").val();
+			var subject = $("#contact_subject").val();
+			var msg = $("#contact_message").val();
+			$.ajax({
+				type: 'POST',
+				url: cpm_object.ajax_url, //get form data to send function.php 
+				data: {
+				    action: 'set_form',
+				    name: name,
+				    mail: mail,
+				    subject: subject,
+				    msg: msg
+				}
+			    })
+			    .done(function(data) {
 
-function set_form1(){
-	$name = $_POST['name'];
-	$email = $_POST['mail'];
-    $subj=$_post['subject'];
-	$message = $_POST['msg'];
-	$admin =get_option('admin_email');
-	echo $name;
-	
-	
-	exit(); //must for all ajax because solve 0 add ajax data
-}  
+				$(".contact_form_error").html("THANK YOU FOR SUBMIT").css("color", "green");
+			    })
+			    .error(function(a) {
+				$(".contact_form_error").html("SOMETHING WRONG").css("color", "red");
+			    });
+			return false;
+		    });
+		});
+
+		 4)   // THE AJAX ADD ACTIONS
+		add_action( 'wp_ajax_set_form', 'set_form1' );    //execute when wp logged in  //wp_ajax_set_form -> same name for action
+		add_action( 'wp_ajax_nopriv_set_form', 'set_form1'); //execute when logged out
+
+		function set_form1(){
+			$name = $_POST['name'];
+			$email = $_POST['mail'];
+		    $subj=$_post['subject'];
+			$message = $_POST['msg'];
+			$admin =get_option('admin_email');
+			echo $name;
+
+
+			exit(); //must for all ajax because solve 0 add ajax data
+		}  
+
+			5) add form data into posts
+			 
+			 if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action'] == "my_post_type") {
+
+				//store our post vars into variables for later use
+				//now would be a good time to run some basic error checking/validation
+				//to ensure that data for these values have been set
+				$title     = $_POST['title'];
+				$content   = $_POST['content'];
+				$post_type = 'my_custom_post';
+				$custom_field_1 = $_POST['custom_1'];
+				$custom_field_2 = $_POST['custom_2'];    
+
+				//the array of arguements to be inserted with wp_insert_post
+				$new_post = array(
+				'post_title'    => $title,
+				'post_content'  => $content,
+				'post_status'   => 'publish',          
+				'post_type'     => $post_type 
+				);
+
+				//insert the the post into database by passing $new_post to wp_insert_post
+				//store our post ID in a variable $pid
+				$pid = wp_insert_post($new_post);
+
+				//we now use $pid (post id) to help add out post meta data
+				add_post_meta($pid, 'meta_key', $custom_field_1, true);
+				add_post_meta($pid, 'meta_key', $custom_field_2, true);
+
+				}

@@ -1,4 +1,4 @@
-1)	form 
+1)	form front end
 	
 	<form action="" method="post" id="form1" class="tm-contact-form">                                
                                 <div class="form-group">
@@ -17,4 +17,66 @@
                                 <button type="submit" name="submit" class="tm-btn">Submit</button><br><br>  
                                 <span class="contact_form_error"></span>                        
             </form> 
- 2)
+ 2) jquery file for ajax
+ 
+		$(document).ready(function() {
+		    $("form").submit(function(event) {
+			event.preventDefault();
+			var name = $("#contact_name").val();
+			var mail = $("#contact_email").val();
+			var subject = $("#contact_subject").val();
+			var msg = $("#contact_message").val();
+			$.ajax({
+				type: 'POST',
+				url: cpm_object.ajax_url,  // obj name . wp main/default file reference 
+				data: {
+				    action: 'set_form',
+				    name: name,
+				    mail: mail,
+				    subject: subject,
+				    msg: msg
+				}
+			    })
+			    .done(function(data) {
+
+				$(".contact_form_error").html("THANK YOU FOR SUBMIT").css("color", "green");
+				document.getElementById("form1").reset();
+			    })
+			    .error(function(a) {
+				$(".contact_form_error").html("SOMETHING WRONG").css("color", "red");
+			    });
+
+		    });
+		});
+		
+3)	//enque file in function.php
+	
+		wp_enqueue_script("ajax-script",get_template_directory_uri()."/js/main.js");		//ajax jquery file
+							
+		wp_localize_script( 'ajax-script', 'cpm_object', array('ajax_url' => admin_url( 'admin-ajax.php' ) ));		//ajax url refer 
+		
+		//process ajax data to store custom table wp_my_example_table
+		
+		// THE AJAX ADD ACTIONS
+		add_action( 'wp_ajax_set_form', 'set_form1' );    //execute when wp logged in
+		add_action( 'wp_ajax_nopriv_set_form', 'set_form1'); //execute when logged out
+
+		function set_form1(){
+		    if('POST' == $_SERVER['REQUEST_METHOD']){
+
+		       if(!empty($_POST['name']) && !empty($_POST['mail']) && !empty($_POST['subject']) && !empty($_POST['msg']) ){
+
+			    global $wpdb;     
+			    $table_name = $wpdb->prefix . 'my_example_table';     
+			    $name= $_POST['name'];    
+			    $mail= $_POST['mail'];
+			    $subj= $_POST['subject'];
+			    $msg= $_POST['msg'];    
+			    $wpdb->insert($table_name, array( 'name' => $name, 'email' => $mail, 'subject' => $subj, 'message'=>$msg), array( '%s', '%s', '%s', '%s'));
+			    echo "record inserted";    
+		       }
+
+		    }
+		    exit();  //remove 0 from ajax process data   tip: must inclue exit(); end of function
+		}
+		

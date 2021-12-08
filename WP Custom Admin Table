@@ -2,7 +2,7 @@
    refer link   ->  1) https://wpengineer.com/2426/wp_list_table-a-step-by-step-guide/  (Basic Refer Easy)
                     2) https://www.nxtut.com/wp-custom-admin-table/    
 
-1)        // code to make admin menu and page for plugin
+   1)        // code to make admin menu and page for plugin       [*tip - all methood written inside class My_List_Table extends WP_List_Table {  //code   } ]
         add_action( 'admin_menu', 'my_new_plugin_menu' );
         //Not necessary to create new plug in use post or page
         function my_new_plugin_menu() {
@@ -73,6 +73,71 @@
         }
 
    // basic table can view after add some option code below
+   
+   // add sort option 
+    function get_sortable_columns() {
+        $sortable_column = array(
+            'id'  => array('id',false),
+            'name' => array('name',false),
+            'email'   => array('email',false),
+            'subject'   => array('subject',false),
+            'message'   => array('message',false),
+            'created_at'   => array('created_at',false),
+            'updated_at'   => array('updated_at',false)
+           );
+           return $sortable_column;
+       }
+       
+       // prepare_item() method inside  call mathod        $sortable=array(); to $sortable=$this->get_sortable_columns();
+       
+       //function for sort
+       function usort_reorder( $a, $b ) {
+           // If no sort, default to title
+           $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'id';
+           // If no order, default to asc
+           $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+           // Determine sort order
+           $result = strcmp( $a[$orderby], $b[$orderby] );
+           // Send final sort direction to usort
+           return ( $order === 'asc' ) ? $result : -$result;
+       }
+       
+       //this method call inside prepare_item()   usort( $this->get_data(), array( &$this, ‘usort_reorder’ ) );
+       
+       
+       //Actions are used to manipulate data means to update or delete data.
+    function column_id($item) {
+        $actions = array(
+        'edit' => sprintf('<a href="?
+        page=%s&action=%s&book=%s">Edit</a>',$_REQUEST->page,'edit',$item->ID),
+        'delete' => sprintf('<a href="?
+        page=%s&action=%s&book=%s">Delete</a>',$_REQUEST->page,'delete',$item->ID),
+        );
+    return sprintf('%1$s %2$s', $item->id, $this->row_actions($actions) );
+    }
+    
+    //Bulk Actions
+    function get_bulk_actions() {
+    $actions = array(
+    'delete' => 'Delete'
+    );
+    return $actions;
+    }
+    
+    
+    //For enabling bulk actions we require checkboxes , the following code makes the  required checkboxes .
+    function column_cb($item) {
+    return sprintf(
+    '<input type="checkbox" name="book[]" value="%s" />', $item->ID
+    );
+    }
+    
+    //above method can call  get_columns() {  $columns =  array(  'cb'  => '<input type="checkbox" />', code..) }
+   
+   
+   
+
+   }
    
    
    

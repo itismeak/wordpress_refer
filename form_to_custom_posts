@@ -3,3 +3,28 @@ Posting via the Front End:
 refer -> https://stackoverflow.com/questions/27483694/how-to-create-custom-post-type-item-by-submitting-form-on-frontend-in-wordpress
       -> https://wordpress.stackexchange.com/questions/11288/form-to-add-posts-to-custom-post-type
 
+
+            //ajax submit
+	
+		// if(isset($_POST['register'])){
+		// 				$name= $_POST['name'];    
+		// 				$mail= $_POST['mail'];
+		// 				$psw= $_POST['psw'];
+
+		// 				//custom post type store form data
+		// 				$my_post=array(
+		// 					'post_type'=>'admin_table',
+		// 					'post_status'=>'publish',
+		// 					'post_title'=> $name
+		// 				);
+		// 				$post_id=wp_insert_post($my_post);
+					
+
+		// 				//update_field('name',$name,$post_id);
+		// 				update_field('email',$mail,$post_id);
+		// 				update_field('password',$psw,$post_id);
+						
+						
+					
+		// 				die;
+		// }

@@ -1,0 +1,75 @@
+set_feauture_img from local
+// THE AJAX ADD ACTIONS
+		add_action( 'wp_ajax_set_form', 'set_form' );    //execute when wp logged in
+		add_action( 'wp_ajax_nopriv_set_form', 'set_form'); //execute when logged out
+
+		function set_form(){
+			
+		    if('POST' == $_SERVER['REQUEST_METHOD']){
+
+                
+						$name= $_POST['name'];    
+						$mail= $_POST['mail'];
+						$psw= md5($_POST['psw']);
+						$file=$_FILES["file"]["name"];
+
+						$uploaddir = wp_upload_dir();
+						$file=time()."_".str_replace(' ','_',$file);
+						$target_dir= $uploaddir['path'] . '/';
+						$target_file=$target_dir.basename($file);
+						if(move_uploaded_file($_FILES["file"]["tmp_name"],$target_file)){
+							echo $target_file;
+						}else{
+							echo "something wrong";
+						}
+						
+
+
+						//custom post type store form data
+						$my_post=array(
+							'post_type'=>'admin_table',
+							'post_status'=>'publish',
+							'post_title'=> $name
+						);
+						$post_id=wp_insert_post($my_post);
+					
+
+						//update_field('name',$name,$post_id);
+						update_post_meta($post_id,'email',sanitize_email($mail));
+						update_post_meta($post_id,'psw',$psw);
+						update_post_meta($post_id,'file',$file);
+
+						Generate_Featured_Image($target_file , $post_id);
+						
+						
+                        
+						die;
+                
+
+			}
+
+		exit();  //remove 0 from ajax process data   tip: must inclue exit(); end of function	    
+		}
+function Generate_Featured_Image( $image_url, $post_id  ){
+			$upload_dir = wp_upload_dir();
+			$image_data = file_get_contents($image_url);
+			$filename = basename($image_url);
+			if(wp_mkdir_p($upload_dir['path']))
+			$file = $upload_dir['path'] . '/' . $filename;
+			else
+			$file = $upload_dir['basedir'] . '/' . $filename;
+			file_put_contents($file, $image_data);
+
+			$wp_filetype = wp_check_filetype($filename, null );
+			$attachment = array(
+				'post_mime_type' => $wp_filetype['type'],
+				'post_title' => sanitize_file_name($filename),
+				'post_content' => '',
+				'post_status' => 'inherit'
+			);
+			$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+			$res1= wp_update_attachment_metadata( $attach_id, $attach_data );
+			$res2= set_post_thumbnail( $post_id, $attach_id );
+		}
